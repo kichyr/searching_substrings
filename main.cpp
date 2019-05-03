@@ -1,9 +1,12 @@
 #include<iostream>
 #include <unistd.h>
 #include <iterator>
+#include <unistd.h>
 #include"searcher.h"
 using namespace std;
 
+
+const int read_at_one_time = 7;
 //overlord <<
 template <typename T>
 std::ostream& operator<< (std::ostream& out, const std::vector<T>& v) {
@@ -28,7 +31,7 @@ void print_modifyed_str(char* s, int size_s, vector<int>& answ, int start) {
 
 
 int main(int argc, char** argv) {
-    int SIZE = 6;
+    int SIZE = read_at_one_time;
 
     if(argc < 1) {
         throw("too few arguments");
@@ -49,26 +52,22 @@ int main(int argc, char** argv) {
     vector<int> answ;
 
 
-    cin.read( input, SIZE );
-    readen = cin.gcount();
-    //cout << input << endl;
-    while(readen != 0){
+    readen = read(1, input, SIZE);
+     
 
-        cout << readen << input << endl;
+    while(true){
 
-        
         search.BM(input, SIZE, answ);
-        //cout << "\n///" << input << " " << answ << "" << SIZE-readen << endl;
-        //cout << SIZE-readen << input_size << " " << input+SIZE-readen-1 << endl;
         print_modifyed_str(input, SIZE, answ, SIZE-readen);
-        //cout << "/...../" << input << "lol" << input + patt_len << endl;
+        cout << SIZE << endl;
+        if(SIZE < read_at_one_time)
+            break;
         for(int j = 0; j < patt_len-1; j++) {
             input[patt_len - j - 2] = input[SIZE - j -1];
         }
-        cin.read( input + patt_len - 1, SIZE - patt_len +1);
-        readen = cin.gcount();
+        readen = read(1, input + patt_len - 1, SIZE - patt_len +1);
+        SIZE = readen + patt_len - 1;
     }
-
-    free(input);
+    delete[](input);
     return 0;
 }
