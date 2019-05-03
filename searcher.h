@@ -1,6 +1,5 @@
 #include<string>
 #include<vector>
-//del
 #include<iostream>
 //
 class searcher {
@@ -13,12 +12,15 @@ private:
     int len_p;
     std::vector<int> z;
 
+    //вычисление смещения плохого символа, заполняет bmBs
     void pre_bmBc();
+    //вычисление смещения хорошего суффикса, заполняет bmGs
     void pre_bmGs();
 
     //tests
     friend void utest_z_func();
     friend void test_heuristics();
+    friend void test_BM();
 
     /*
     для строки вычисляет массив, в i-ой ячейке которого лежит размер максимального суффикса строки 
@@ -29,5 +31,12 @@ private:
 public:
     searcher(std::string _pattern);
     ~searcher();
-    int search_it(std::string& sample);// ищет в строке sample подстроку
+    /*
+    Основной алгоритм, записывает в вектор номера вхождений строки pattern
+    в заданную строку s
+    */
+    void BM(char* s,int size_s, std::vector<int>& answer);
+    void BM(std::string s, std::vector<int>& answer);
+
+
 };
